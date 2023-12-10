@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+        }
+
+        .flex-container {
+            background-color: rgba(255, 255, 255, 0.15);
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        #result {
+            margin-top: 20px;
+            font-size: 18px;
+            font-weight: bold;
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        #temperatureInput {
+            text-align: center;
+        }
+        .image-cold {
+    background-image: url('https://media3.giphy.com/media/KaW6fNYZf6eSk/giphy.gif');
+    background-color: rgba(52, 152, 219, 0.7);
+    background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.image-normal {
+    background-image: url('normal.jpg');
+    background-color: rgba(46, 204, 113, 0.7);
+    background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.image-hot {
+    background-image: url('https://media1.giphy.com/media/P7JmDW7IkB7TW/giphy.gif');
+    background-color: rgba(231, 76, 60, 0.15); 
+    background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+    </style>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            document.getElementById("convertButton").addEventListener("click", function () {
+                convertTemperature();
+            });
+        });
+
+        function convertTemperature() {
+            var inputTemperature = parseFloat(document.getElementById("temperatureInput").value);
+
+            if (isNaN(inputTemperature)) {
+                alert("Please enter a valid number for temperature.");
+                return;
+            }
+
+            var fromUnit = document.getElementById("fromUnit").value;
+            var toUnit = document.getElementById("toUnit").value;
+            var result = convert(inputTemperature, fromUnit, toUnit);
+
+            var resultElement = document.getElementById("result");
+            resultElement.innerText = "Converted Temperature: " + result.toFixed(2) + " " + toUnit;
+            document.body.style.backgroundColor = getBackgroundColor(result);
+            resultElement.style.color = getTextColor(result);
+        }
+
+        function convert(temperature, fromUnit, toUnit) {
+            if (fromUnit === "Celsius" && toUnit === "Fahrenheit") {
+                return (temperature * 9/5) + 32;
+            } else if (fromUnit === "Fahrenheit" && toUnit === "Celsius") {
+                return (temperature - 32) * 5/9;
+            } else if (fromUnit === "Celsius" && toUnit === "Kelvin") {
+                return temperature + 273.15;
+            } else if (fromUnit === "Kelvin" && toUnit === "Celsius") {
+                return temperature - 273.15;
+            } else if (fromUnit === "Fahrenheit" && toUnit === "Kelvin") {
+                return (temperature - 32) * 5/9 + 273.15;
+            } else if (fromUnit === "Kelvin" && toUnit === "Fahrenheit") {
+                return (temperature - 273.15) * 9/5 + 32;
+            } else {
+                return temperature;
+            }
+        }
+
+        function getBackgroundColor(temperature) {
+            if (temperature < 0) {
+                return "#3498db";
+            } else if (temperature > 100) {
+                return "#e74c3c";
+            } else {
+                return "#2ecc71";
+            }
+        }
+        function getBackgroundColor(temperature) {
+            if (temperature < 0) {
+                document.body.className = "image-cold";
+                return "#3498db";
+            } else if (temperature > 100) {
+                document.body.className = "image-hot";
+                return "#e74c3c";
+            } else {
+                document.body.className = "image-normal";
+                return "#2ecc71";
+            }
+        }
+
+        function getTextColor(temperature) {
+            return temperature < 0 ? "#fff" : "#333";
+        }
+    </script>
+</head>
+<body class="image-normal">
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-6 flex-container">
+                <h2 class="mb-4">Temperature Converter</h2>
+                
+                <div class="form-group">
+                    <label for="temperatureInput">Enter Temperature:</label>
+                    <input type="text" class="form-control" id="temperatureInput" placeholder="Enter temperature">
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="fromUnit">From:</label>
+                        <select class="form-control" id="fromUnit">
+                            <option value="Celsius">Celsius</option>
+                            <option value="Fahrenheit">Fahrenheit</option>
+                            <option value="Kelvin">Kelvin</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group col-md-6">
+                        <label for="toUnit">To:</label>
+                        <select class="form-control" id="toUnit">
+                            <option value="Celsius">Celsius</option>
+                            <option value="Fahrenheit">Fahrenheit</option>
+                            <option value="Kelvin">Kelvin</option>
+                        </select>
+                    </div>
+                </div>
+
+                <button id="convertButton" class="btn btn-success btn-block">Convert</button>
+
+                <div id="result" class="mt-4"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.0.7/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
